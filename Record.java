@@ -5,10 +5,11 @@ public class Record {
   private boolean empty;
 
   public String Id;
-  public String Experience;
-  public String Married;
-  public String Wage;
-  public String Industry;
+  public String Rank;
+  public String City;
+  public String State;
+  public String Zip;
+  public String Employees;
 
   public Record() {
     empty = true;
@@ -22,12 +23,13 @@ public class Record {
    * @throws IOException
    */
   public void updateFields(String[] fields) throws IOException {
-    if (fields.length == 5) {
+    if (fields.length == 6) {
       this.Id = fields[0];
-      this.Experience = fields[1];
-      this.Married = fields[2];
-      this.Wage = fields[3];
-      this.Industry = fields[4];
+      this.Rank = fields[1];
+      this.City = fields[2];
+      this.State = fields[3];
+      this.Zip = fields[4];
+      this.Employees = fields[5];
 
       empty = false;
     } else
@@ -45,10 +47,11 @@ public class Record {
 
   public String toString() {
     return "Id: " + this.Id +
-        ", Experience: " + this.Experience +
-        ", Married: " + this.Married +
-        ", Wage: " + this.Wage +
-        ", Industry: " + this.Industry;
+        ", Rank: " + this.Rank +
+        ", City: " + this.City +
+        ", State: " + this.State +
+        ", Zip: " + this.Zip +
+        ", Employees: " + this.Employees;
   }
 
 }

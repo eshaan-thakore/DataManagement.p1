@@ -9,19 +9,21 @@ public class DB {
   private RandomAccessFile Dinout;
   private int num_records;
   private String Id;
-  private String Experience;
-  private String Married;
-  private String Wage;
-  private String Industry;
+  private String Rank;
+  private String City;
+  private String State;
+  private String Zip;
+  private String Employees;
 
   public DB() {
     this.Dinout = null;
     this.num_records = 0;
     this.Id = "ID";
-    this.Experience = "EXPERIENCE";
-    this.Married = "MARRIED";
-    this.Wage = "WAGE";
-    this.Industry = "INDUSTRY";
+    this.Rank = "RANK";
+    this.City = "CITY";
+    this.State = "STATE";
+    this.Zip = "ZIP";
+    this.Employees = "EMPLOYEES";
   }
 
   /**
@@ -50,12 +52,12 @@ public class DB {
   public void writeRecord(RandomAccessFile file, String Id, String Experience, String Married, String Wage, String Industry ) {
     	//format input values to be put in record
         this.Id = String.format("%-10s", Id.length() > 8 ? Id.substring(0, 8) : Id);
-        this.Experience = String.format("%-5s", Experience.length() > 3 ? Experience.substring(0, 3) : Experience);
-        this.Married = String.format("%-5s", Married.length() > 3 ? Married.substring(0, 3) : Married);
-        this.Wage = String.format("%-20s", Wage.length() > 18 ? Wage.substring(0, 18) : Wage);
-        this.Industry = String.format("%-30s", Industry.length() > 28 ? Industry.substring(0, 28) : Industry);
+        this.Rank = String.format("%-5s", Experience.length() > 3 ? Experience.substring(0, 3) : Experience);
+        this.City = String.format("%-5s", Married.length() > 3 ? Married.substring(0, 3) : Married);
+        this.State = String.format("%-20s", Wage.length() > 18 ? Wage.substring(0, 18) : Wage);
+        this.Zip = String.format("%-30s", Industry.length() > 28 ? Industry.substring(0, 28) : Industry);
 	try {
-		file.writeBytes(this.Id + this.Experience + this.Married + this.Wage + this.Industry+"\n");
+		file.writeBytes(this.Id + this.Rank + this.City + this.State + this.Zip + this.Employees+"\n");
 	} catch (IOException e) {
 		// TODO Auto-generated catch block
 		e.printStackTrace();
