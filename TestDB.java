@@ -80,7 +80,7 @@ public class TestDB {
 
     // Overwrite the previously read middle record
     record_num = DB.NUM_RECORDS/2;
-    db.overwriteRecord(record_num,"00006","9","yes","1.12345678901234567890","Programmer");
+    db.overwriteRecord(record_num,"AES", "194", "ARLINGTON", "VA", "22203", "19000");  // added new values fitting the new data
 
     // Rereads record 5 (middle record) to show that it has been overwritten
     record_num = DB.NUM_RECORDS/2;
