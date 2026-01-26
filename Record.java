@@ -4,7 +4,7 @@ public class Record {
 
   private boolean empty;
 
-  public String Id;
+  public String Name;
   public String Rank;
   public String City;
   public String State;
@@ -24,7 +24,7 @@ public class Record {
    */
   public void updateFields(String[] fields) throws IOException {
     if (fields.length == 6) {
-      this.Id = fields[0];
+      this.Name = fields[0];
       this.Rank = fields[1];
       this.City = fields[2];
       this.State = fields[3];
@@ -46,7 +46,7 @@ public class Record {
   }
 
   public String toString() {
-    return "Id: " + this.Id +
+    return "Name: " + this.Name +
         ", Rank: " + this.Rank +
         ", City: " + this.City +
         ", State: " + this.State +

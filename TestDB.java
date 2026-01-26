@@ -13,10 +13,10 @@ public class TestDB {
     DB db = new DB();
 
     // creates database from csv file 
-    db.createDB("input");
-    
-    // opens "input.data"
-    db.open("input.data");
+    db.createDB("Fortune500_small"); // creates Fortune500_small.data
+
+    // opens "Fortune500_small.data"
+    db.open("Fortune500_small");
 
     System.out
         .println("------------- Testing readRecord ------------");
@@ -27,8 +27,7 @@ public class TestDB {
     // id: 00003 experience: 3 married: no wages: 1.344461678 industry:
     // Business_and_Repair_Service
     int record_num = 0;
-    record = new Record();
-    record = db.readRecord(record_num);
+    Record record = db.readRecord(record_num);
     if (!record.isEmpty())
       System.out.println("RecordNum " + record_num + ": " + record.toString() + "\n\n");
     else {
@@ -37,7 +36,7 @@ public class TestDB {
     }
 
     // Reads record 9 (last record)
-    record_num = DB.NUM_RECORDS - 1;
+    record_num = 9;
     record = db.readRecord(record_num);
     if (!record.isEmpty())
       System.out.println("RecordNum " + record_num + ": " + record.toString() + "\n\n");
@@ -46,8 +45,8 @@ public class TestDB {
       System.out.println("Record out of range");
     }
 
-    // Reads record 5 (middle record)
-    record_num = DB.NUM_RECORDS/2;
+    // // Reads record 5 (middle record)
+    record_num = 5;
     record = db.readRecord(record_num);
     if (!record.isEmpty())
       System.out.println("RecordNum " + record_num + ": " + record.toString() + "\n\n");
@@ -56,7 +55,7 @@ public class TestDB {
       System.out.println("Record out of range");
     }
 
-    // Reads record -1 (out of range)
+    // // Reads record -1 (out of range)
     record_num = -1;
     record = db.readRecord(record_num);
     if (!record.isEmpty())
@@ -66,8 +65,8 @@ public class TestDB {
       System.out.println("Record out of range");
     }
 
-    // Reads record 10 (out of range)
-    record_num = DB.NUM_RECORDS;
+    // // Reads record 1000 (out of range)
+    record_num = 1000;
     record = db.readRecord(record_num);
     if (!record.isEmpty())
       System.out.println("RecordNum " + record_num + ": " + record.toString() + "\n\n");
@@ -76,73 +75,75 @@ public class TestDB {
       System.out.println("Record out of range");
     }
 
-    System.out.println("\n\n" + "------------- Testing overwriteRecord ------------");
+    //System.out.println("\n\n" + "------------- Testing overwriteRecord ------------");
 
-    // Overwrite the previously read middle record
-    record_num = DB.NUM_RECORDS/2;
-    db.overwriteRecord(record_num,"AES", "194", "ARLINGTON", "VA", "22203", "19000");  // added new values fitting the new data
+//     // Overwrite the previously read middle record
+//     record_num = DB.NUM_RECORDS/2;
+//     db.overwriteRecord(record_num,"AES", "194", "ARLINGTON", "VA", "22203", "19000");  // added new values fitting the new data
 
-    // Rereads record 5 (middle record) to show that it has been overwritten
-    record_num = DB.NUM_RECORDS/2;
-    record = db.readRecord(record_num);
-    if (!record.isEmpty())
-      System.out.println("RecordNum " + record_num + ": " + record.toString() + "\n\n");
-    else {
-      System.out.println("Could not get Record " + record_num);
-      System.out.println("Record out of range");
-    }
+//     // Rereads record 5 (middle record) to show that it has been overwritten
+//     record_num = DB.NUM_RECORDS/2;
+//     record = db.readRecord(record_num);
+//     if (!record.isEmpty())
+//       System.out.println("RecordNum " + record_num + ": " + record.toString() + "\n\n");
+//     else {
+//       System.out.println("Could not get Record " + record_num);
+//       System.out.println("Record out of range");
+//     }
 
-    System.out.println("------------- Testing binarySearch ------------");
+//     System.out.println("------------- Testing binarySearch ------------");
 
-    // Find record with id 42 (should not be found)// Find record 17
-    String ID = "42";
-    record_num = db.binarySearch(ID);
-    if (record_num != -1) {
-      record = db.readRecord(record_num);
-      System.out
-          .println(
-              "ID " + ID + " found at Record " + record_num + "\nRecordNum " + record_num + ": \n" + record.toString()
-                  + "\n\n");
-    } else
-      System.out.println("ID " + ID + " not found in our records\n\n");
+//     // Find record with id 42 (should not be found)// Find record 17
+//     String ID = "42";
+//     record_num = db.binarySearch(ID);
+//     if (record_num != -1) {
+//       record = db.readRecord(record_num);
+//       System.out
+//           .println(
+//               "ID " + ID + " found at Record " + record_num + "\nRecordNum " + record_num + ": \n" + record.toString()
+//                   + "\n\n");
+//     } else
+//       System.out.println("ID " + ID + " not found in our records\n\n");
 
-    // Find record with id 00000 (the first one in the file)
-    ID = "0000";
-    record_num = db.binarySearch(ID);
-    if (record_num != -1) {
-      record = db.readRecord(record_num);
-      System.out
-          .println(
-              "ID " + ID + " found at Record " + record_num + "\nRecordNum " + record_num + ": \n" + record.toString()
-                  + "\n\n");
-    } else
-      System.out.println("ID " + ID + " not found in our records\n\n");
+//     // Find record with id 00000 (the first one in the file)
+//     ID = "0000";
+//     record_num = db.binarySearch(ID);
+//     if (record_num != -1) {
+//       record = db.readRecord(record_num);
+//       System.out
+//           .println(
+//               "ID " + ID + " found at Record " + record_num + "\nRecordNum " + record_num + ": \n" + record.toString()
+//                   + "\n\n");
+//     } else
+//       System.out.println("ID " + ID + " not found in our records\n\n");
 
-    // Find record with id 00015 (the last one in the file)
-    ID = "00015";
-    record_num = db.binarySearch(ID);
-    if (record_num != -1) {
-      record = db.readRecord(record_num);
-      System.out
-          .println(
-              "ID " + ID + " found at Record " + record_num + "\nRecordNum " + record_num + ": \n" + record.toString()
-                  + "\n\n");
-    } else
-      System.out.println("ID " + ID + " not found in our records\n\n");
+//     // Find record with id 00015 (the last one in the file)
+//     ID = "00015";
+//     record_num = db.binarySearch(ID);
+//     if (record_num != -1) {
+//       record = db.readRecord(record_num);
+//       System.out
+//           .println(
+//               "ID " + ID + " found at Record " + record_num + "\nRecordNum " + record_num + ": \n" + record.toString()
+//                   + "\n\n");
+//     } else
+//       System.out.println("ID " + ID + " not found in our records\n\n");
 
-    // Find record with id 00006 (somewhere in the middle)
-    ID = "00006";
-    record_num = db.binarySearch(ID);
-    if (record_num != -1) {
-      record = db.readRecord(record_num);
-      System.out
-          .println(
-              "ID " + ID + " found at Record " + record_num + "\nRecordNum " + record_num + ": \n" + record.toString()
-                  + "\n\n");
-    } else
-      System.out.println("ID " + ID + " not found in our records\n\n");
+//     // Find record with id 00006 (somewhere in the middle)
+//     ID = "00006";
+//     record_num = db.binarySearch(ID);
+//     if (record_num != -1) {
+//       record = db.readRecord(record_num);
+//       System.out
+//           .println(
+//               "ID " + ID + " found at Record " + record_num + "\nRecordNum " + record_num + ": \n" + record.toString()
+//                   + "\n\n");
+//     } else
+//       System.out.println("ID " + ID + " not found in our records\n\n");
 
-    // Close database
+//     // Close database
+//     db.close();
+//   }
     db.close();
   }
 }

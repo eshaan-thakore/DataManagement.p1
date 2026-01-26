@@ -104,10 +104,15 @@ public class DB {
       RandomAccessFile Din = new RandomAccessFile(prefix+".csv", "r");
       RandomAccessFile Dout = new RandomAccessFile(prefix+".data","rw");
       Dout.setLength(0); // clear file if it already exists 
+      
       String line;
       int count = 0;
+      
       while ((line = Din.readLine()) != null) {
-          String[] attribute = line.split(",");
+          String[] attribute = line.split(",", -1); // -1 to include trailing empty strings
+          for (int k = 0; k < 6; k++) {
+              attribute[k] = attribute[k].trim();
+          }
           writeRecord (Dout, attribute[0], attribute[1], attribute[2], attribute[3], attribute[4], attribute[5]);
       
           count++;
@@ -115,7 +120,7 @@ public class DB {
       Din.close();
       Dout.close();
 
-      RandomAccessFile cfg = new RandomAccessFile(prefix+".cfg", "rw");  // adding config file
+      RandomAccessFile cfg = new RandomAccessFile(prefix+".config", "rw");  // adding config file
       cfg.setLength(0); // clear file if it already exists
       cfg.writeBytes("numSortedRecords="+count+"\n");
       cfg.writeBytes("recordSize=" + RECORD_SIZE + "\n");
@@ -189,7 +194,7 @@ public class DB {
     while (!Found && (High >= Low)) {
       Middle = (Low + High) / 2;
       record = readRecord(Middle);
-      String MiddleId = record.Id;
+      String MiddleId = record.Name;
 
       // int result = MiddleId[0].compareTo(id); // DOES STRING COMPARE
       int result = Integer.parseInt(MiddleId) - Integer.parseInt(id); // DOES INT COMPARE of MiddleId[0] and id
