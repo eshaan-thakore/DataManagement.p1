@@ -26,8 +26,11 @@ public class TestDB {
     // field and the values read from the record, i.e.,
     // id: 00003 experience: 3 married: no wages: 1.344461678 industry:
     // Business_and_Repair_Service
+
+    // for part 1, hardcoded which records to read for testing
+    
     int record_num = 0;
-    Record record = db.readRecord(record_num);
+    record = db.readRecord(record_num);
     if (!record.isEmpty())
       System.out.println("RecordNum " + record_num + ": " + record.toString() + "\n\n");
     else {
@@ -75,6 +78,7 @@ public class TestDB {
       System.out.println("Record out of range");
     }
 
+    //commented out for part 1, unnecessary for now 
     //System.out.println("\n\n" + "------------- Testing overwriteRecord ------------");
 
 //     // Overwrite the previously read middle record

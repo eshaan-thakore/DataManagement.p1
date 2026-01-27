@@ -4,10 +4,12 @@ import java.io.RandomAccessFile;
 public class DB {
   public static final int NUM_RECORDS = 10;
   public static final int RECORD_SIZE = 93; // summed widths of all fields + newline (40 + 5 + 25 + 2 + 10 + 10 +1=93)
-  public static final int name_w = 40, rank_w = 5, city_w = 25, state_w = 2, zip_w = 10, employees_w = 10;
+  public static final int name_w = 40, rank_w = 5, city_w = 25, state_w = 2, zip_w = 10, employees_w = 10;  // widths of each field for clarity
 
   private RandomAccessFile Dinout;
   private int num_records;
+
+  // Fields to hold record data temporarily
   private String Name;
   private String Rank;
   private String City;
@@ -15,6 +17,7 @@ public class DB {
   private String Zip;
   private String Employees;
 
+  // altered constructor to fit new csv
   public DB() {
     this.Dinout = null;
     this.num_records = 0;
@@ -38,7 +41,7 @@ public class DB {
 
     // Open file in read/write mode
     try {
-      RandomAccessFile cfg = new RandomAccessFile(prefix + ".config", "r");
+      RandomAccessFile cfg = new RandomAccessFile(prefix + ".config", "r");  // read config file for number of records
       String line;
       while ((line = cfg.readLine()) != null) {
         line = line.trim();
@@ -61,7 +64,7 @@ public class DB {
    * Writes the data to the location specified by file parameter
    *  
    */
-  public void writeRecord(RandomAccessFile file, String Name, String Rank, String City, String State, String Zip, String Employees ) {
+  public void writeRecord(RandomAccessFile file, String Name, String Rank, String City, String State, String Zip, String Employees ) { //writes record to file with padding for uniform file reading
     	//format input values to be put in record
         this.Name = String.format("%-" + name_w + "s", Name.length() > name_w ? Name.substring(0, name_w) : Name);
         this.Rank = String.format("%-" + rank_w + "s", Rank.length() > rank_w ? Rank.substring(0, rank_w) : Rank);
@@ -110,10 +113,12 @@ public class DB {
       
       while ((line = Din.readLine()) != null) {
           String[] attribute = line.split(",", -1); // -1 to include trailing empty strings
+          if (attribute.length > 6) continue; // skip malformed lines
+          // trim whitespace from each attribute
           for (int k = 0; k < 6; k++) {
               attribute[k] = attribute[k].trim();
           }
-          writeRecord (Dout, attribute[0], attribute[1], attribute[2], attribute[3], attribute[4], attribute[5]);
+          writeRecord (Dout, attribute[0], attribute[1], attribute[2], attribute[3], attribute[4], attribute[5]); //added one more attribute to fit new csv
       
           count++;
       }
@@ -132,6 +137,8 @@ public class DB {
    * Close the database file
    */
   public void close() {
+    if (Dinout == null) // guard so it doesnt crash if open fails
+      return;
     try {
       Dinout.close();
     } catch (IOException e) {

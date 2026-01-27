@@ -4,6 +4,7 @@ public class Record {
 
   private boolean empty;
 
+  // adding fields according to new csv
   public String Name;
   public String Rank;
   public String City;
@@ -29,7 +30,7 @@ public class Record {
       this.City = fields[2];
       this.State = fields[3];
       this.Zip = fields[4];
-      this.Employees = fields[5];
+      this.Employees = fields[5];  // added one more field for new csv
 
       empty = false;
     } else
@@ -45,6 +46,7 @@ public class Record {
     return empty;
   }
 
+  // altered to fit new csv fields
   public String toString() {
     return "Name: " + this.Name +
         ", Rank: " + this.Rank +
