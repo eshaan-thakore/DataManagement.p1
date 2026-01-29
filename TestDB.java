@@ -83,7 +83,7 @@ public class TestDB {
 
     // Overwrite the previously read middle record
     record_num = DB.NUM_RECORDS/2;
-    db.overwriteRecord(record_num,"AES", "194", "ARLINGTON", "VA", "22203", "19000");  // added new values fitting the new data
+    db.updateRecord(record_num,"AES", "200", "ARLING", "VU", "22203", "19000");  // added new values fitting the new data
 
     // Rereads record 5 (middle record) to show that it has been overwritten
     record_num = DB.NUM_RECORDS/2;
@@ -158,6 +158,7 @@ public class TestDB {
                   + "\n\n");
     } else
       System.out.println("NAME " + userInput + " not found in our records\n\n");
+    
     
     scanner.close();
     // closes the database file

@@ -224,4 +224,13 @@ public class DB {
     } else
       return binarySearch(name.trim());
   }
+
+  public int updateRecord(int record_num, String Name, String Rank, String City, String State, String Zip, String Employees) { //wrapper for overwrite record to check if file is open
+    if (Dinout == null) {
+      return -1;
+    } else {
+      overwriteRecord(record_num, Name, Rank, City, State, Zip, Employees);
+      return 0;
+    }
+  }
 }
