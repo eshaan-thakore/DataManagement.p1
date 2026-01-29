@@ -233,4 +233,15 @@ public class DB {
       return 0;
     }
   }
+
+  public boolean deleteRecord(String name) {
+    if (Dinout == null)
+      return false;
+    int record_num = findRecord(name);
+    if (record_num == -1)
+      return false;
+    overwriteRecord(record_num, "", "", "", "", "", "");
+
+    return true;  
+  }
 }
