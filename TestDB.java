@@ -30,6 +30,7 @@ public class TestDB {
 
     // for part 1, hardcoded which records to read for testing
     
+    
     int record_num = 0;
     record = db.readRecord(record_num);
     if (!record.isEmpty())
@@ -147,17 +148,31 @@ public class TestDB {
 
     // Allow user to search for a name
     Scanner scanner = new Scanner(System.in);
-    System.out.println("Enter a NAME to Search: ");
-    String userInput = scanner.nextLine().toUpperCase();  // convert to uppercase to match database entries
-    record_num = db.findRecord(userInput);
-    if (record_num != -1) {
-      record = db.readRecord(record_num);
-      System.out
-          .println(
-              "NAME " + userInput + " found at Record " + record_num + "\nRecordNum " + record_num + ": \n" + record.toString()
-                  + "\n\n");
-    } else
-      System.out.println("NAME " + userInput + " not found in our records\n\n");
+    // System.out.println("------------- User Search ------------");
+    System.out.println("MENU OF OPERATIONS:");
+    System.out.println("1. Create a new database\n");
+    System.out.println("2. Open a database\n");
+    System.out.println("3. Close a database\n");
+    System.out.println("4. Display a record\n");
+    System.out.println("5. Write a record\n");
+    System.out.println("6. Find a record\n");
+    System.out.println("7. Exit\n");
+    System.out.println("Enter your choice (1-7): ");
+
+    int choice = scanner.nextInt();
+    scanner.nextLine();  
+
+    // System.out.println("Enter a NAME to Search: ");
+    // String userInput = scanner.nextLine().toUpperCase();  // convert to uppercase to match database entries
+    // record_num = db.findRecord(userInput);
+    // if (record_num != -1) {
+    //   record = db.readRecord(record_num);
+    //   System.out
+    //       .println(
+    //           "NAME " + userInput + " found at Record " + record_num + "\nRecordNum " + record_num + ": \n" + record.toString()
+    //               + "\n\n");
+    // } else
+    //   System.out.println("NAME " + userInput + " not found in our records\n\n");
     
     
     scanner.close();

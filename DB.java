@@ -241,7 +241,6 @@ public class DB {
     if (record_num == -1)
       return false;
     overwriteRecord(record_num, "", "", "", "", "", "");
-
     return true;  
   }
 }
