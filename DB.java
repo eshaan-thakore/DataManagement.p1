@@ -217,4 +217,11 @@ public class DB {
     } else
       return -1;
   }
+
+  public int findRecord(String name) { //wrapper for binary search to check if file is open
+    if (Dinout == null) {
+      return -1;
+    } else
+      return binarySearch(name.trim());
+  }
 }

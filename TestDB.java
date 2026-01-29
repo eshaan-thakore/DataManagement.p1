@@ -1,4 +1,5 @@
 import java.io.IOException;
+import java.util.Scanner;
 
 //-----------------------------------------------------
 // Example code to read from fixed length records (random access file)
@@ -98,7 +99,7 @@ public class TestDB {
 
     // Find record with name 42 (should not be found)// Find record 17
     String NAME = "3M";
-    record_num = db.binarySearch(NAME);
+    record_num = db.findRecord(NAME);
     if (record_num != -1) {
       record = db.readRecord(record_num);
       System.out
@@ -110,7 +111,7 @@ public class TestDB {
 
     // Find record with name 00000 (the first one in the file)
     NAME = "TESLA";
-    record_num = db.binarySearch(NAME);
+    record_num = db.findRecord(NAME);
     if (record_num != -1) {
       record = db.readRecord(record_num);
       System.out
@@ -121,8 +122,8 @@ public class TestDB {
       System.out.println("NAME " + NAME + " not found in our records\n\n");
 
     // Find record with name 00015 (the last one in the file)
-    NAME = "ZIMMER";
-    record_num = db.binarySearch(NAME);
+    NAME = "ZIMMER BIOMET HOLDINGS";
+    record_num = db.findRecord(NAME);
     if (record_num != -1) {
       record = db.readRecord(record_num);
       System.out
@@ -133,8 +134,8 @@ public class TestDB {
       System.out.println("NAME " + NAME + " not found in our records\n\n");
 
     // Find record with name 00006 (somewhere in the middle)
-    NAME = "WESCO";
-    record_num = db.binarySearch(NAME);
+    NAME = "WESTROCK";
+    record_num = db.findRecord(NAME);
     if (record_num != -1) {
       record = db.readRecord(record_num);
       System.out
@@ -144,6 +145,21 @@ public class TestDB {
     } else
       System.out.println("NAME " + NAME + " not found in our records\n\n");
 
+    // Allow user to search for a name
+    Scanner scanner = new Scanner(System.in);
+    System.out.println("Enter a NAME to Search: ");
+    String userInput = scanner.nextLine().toUpperCase();  // convert to uppercase to match database entries
+    record_num = db.findRecord(userInput);
+    if (record_num != -1) {
+      record = db.readRecord(record_num);
+      System.out
+          .println(
+              "NAME " + userInput + " found at Record " + record_num + "\nRecordNum " + record_num + ": \n" + record.toString()
+                  + "\n\n");
+    } else
+      System.out.println("NAME " + userInput + " not found in our records\n\n");
+    
+    scanner.close();
     // closes the database file
     db.close();
   }
