@@ -13,10 +13,10 @@ public class TestDB {
     DB db = new DB();
 
     // creates database from csv file 
-    db.createDB("Fortune500_small"); // creates Fortune500_small.data
+    db.createDB("Fortune500"); // creates Fortune500_small.data
 
     // opens "Fortune500_small.data"
-    db.open("Fortune500_small");
+    db.open("Fortune500");
 
     System.out
         .println("------------- Testing readRecord ------------");
@@ -96,53 +96,53 @@ public class TestDB {
 
     System.out.println("------------- Testing binarySearch ------------");
 
-    // Find record with id 42 (should not be found)// Find record 17
-    String ID = "42";
-    record_num = db.binarySearch(ID);
+    // Find record with name 42 (should not be found)// Find record 17
+    String NAME = "3M";
+    record_num = db.binarySearch(NAME);
     if (record_num != -1) {
       record = db.readRecord(record_num);
       System.out
           .println(
-              "ID " + ID + " found at Record " + record_num + "\nRecordNum " + record_num + ": \n" + record.toString()
+              "NAME " + NAME + " found at Record " + record_num + "\nRecordNum " + record_num + ": \n" + record.toString()
                   + "\n\n");
     } else
-      System.out.println("ID " + ID + " not found in our records\n\n");
+      System.out.println("NAME " + NAME + " not found in our records\n\n");
 
-    // Find record with id 00000 (the first one in the file)
-    ID = "0000";
-    record_num = db.binarySearch(ID);
+    // Find record with name 00000 (the first one in the file)
+    NAME = "TESLA";
+    record_num = db.binarySearch(NAME);
     if (record_num != -1) {
       record = db.readRecord(record_num);
       System.out
           .println(
-              "ID " + ID + " found at Record " + record_num + "\nRecordNum " + record_num + ": \n" + record.toString()
+              "NAME " + NAME + " found at Record " + record_num + "\nRecordNum " + record_num + ": \n" + record.toString()
                   + "\n\n");
     } else
-      System.out.println("ID " + ID + " not found in our records\n\n");
+      System.out.println("NAME " + NAME + " not found in our records\n\n");
 
-    // Find record with id 00015 (the last one in the file)
-    ID = "00015";
-    record_num = db.binarySearch(ID);
+    // Find record with name 00015 (the last one in the file)
+    NAME = "ZIMMER";
+    record_num = db.binarySearch(NAME);
     if (record_num != -1) {
       record = db.readRecord(record_num);
       System.out
           .println(
-              "ID " + ID + " found at Record " + record_num + "\nRecordNum " + record_num + ": \n" + record.toString()
+              "NAME " + NAME + " found at Record " + record_num + "\nRecordNum " + record_num + ": \n" + record.toString()
                   + "\n\n");
     } else
-      System.out.println("ID " + ID + " not found in our records\n\n");
+      System.out.println("NAME " + NAME + " not found in our records\n\n");
 
-    // Find record with id 00006 (somewhere in the middle)
-    ID = "00006";
-    record_num = db.binarySearch(ID);
+    // Find record with name 00006 (somewhere in the middle)
+    NAME = "WESCO";
+    record_num = db.binarySearch(NAME);
     if (record_num != -1) {
       record = db.readRecord(record_num);
       System.out
           .println(
-              "ID " + ID + " found at Record " + record_num + "\nRecordNum " + record_num + ": \n" + record.toString()
+              "NAME " + NAME + " found at Record " + record_num + "\nRecordNum " + record_num + ": \n" + record.toString()
                   + "\n\n");
     } else
-      System.out.println("ID " + ID + " not found in our records\n\n");
+      System.out.println("NAME " + NAME + " not found in our records\n\n");
 
     // closes the database file
     db.close();

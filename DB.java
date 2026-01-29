@@ -2,7 +2,7 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 
 public class DB {
-  public static final int NUM_RECORDS = 10;
+  public static final int NUM_RECORDS = 500; // total number of records in the database
   public static final int RECORD_SIZE = 93; // summed widths of all fields + newline (40 + 5 + 25 + 2 + 10 + 10 +1=93)
   public static final int name_w = 40, rank_w = 5, city_w = 25, state_w = 2, zip_w = 10, employees_w = 10;  // widths of each field for clarity
 
@@ -191,9 +191,9 @@ public class DB {
    * @return Record number (which can then be used by read to
    *         get the fields) or -1 if id not found
    */
-  public int binarySearch(String id) {
+  public int binarySearch(String name) {
     int Low = 0;
-    int High = NUM_RECORDS - 1;
+    int High = this.num_records - 1;
     int Middle = 0;
     boolean Found = false;
     Record record;
@@ -201,10 +201,10 @@ public class DB {
     while (!Found && (High >= Low)) {
       Middle = (Low + High) / 2;
       record = readRecord(Middle);
-      String MiddleId = record.Name;
+      String MiddleName = record.Name;
 
       // int result = MiddleId[0].compareTo(id); // DOES STRING COMPARE
-      int result = Integer.parseInt(MiddleId) - Integer.parseInt(id); // DOES INT COMPARE of MiddleId[0] and id
+      int result = MiddleName.compareTo(name); // DOES STRING COMPARE of MiddleName and name
       if (result == 0)
         Found = true;
       else if (result < 0)
