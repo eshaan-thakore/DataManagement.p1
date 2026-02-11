@@ -30,7 +30,9 @@ public class DB {
    * @return status true if operation successful
    */
   public boolean open(String prefix) {
-    if (isOpen()) {
+    if (isOpen()) 
+    {
+      System.out.println("Your database is already open. Close it first.");
       return false;
     }
     // Set the number of records
@@ -338,6 +340,22 @@ public class DB {
     return (Dinout != null);
   }
 
+  public void displayRecord(String name)
+  {
+    int idx = findRecord(name);
+    if (idx == -1) {
+        System.out.println("Record not found.");
+        return;
+    }
+    Record r = readRecord(idx);
+    System.out.println("Name: " + r.Name);
+    System.out.println("Rank: " + r.Rank);
+    System.out.println("City: " + r.City);
+    System.out.println("State: " + r.State);
+    System.out.println("Zip: " + r.Zip);
+    System.out.println("Employees: " + r.Employees);
+  }
+
   public boolean addRecord(String Name, String Rank, String City, String State, String Zip, String Employees) {
     if (Dinout == null) 
       return false;
@@ -353,6 +371,16 @@ public class DB {
       e.printStackTrace();
     }
     return false;
+  }
+
+  public void printReport() {
+    int limit = Math.min(10, num_records);
+    for (int i = 0; i < limit; i++) {
+        Record r = readRecord(i);
+        if (r.isEmpty()) break;
+        System.out.printf("%2d) %-40s %-5s %-25s %-2s %-10s %-10s%n",
+                i, r.Name, r.Rank, r.City, r.State, r.Zip, r.Employees);
+    }
   }
 
   public void writeConfig() {

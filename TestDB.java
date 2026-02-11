@@ -5,22 +5,26 @@ import java.util.Scanner;
 // Example code to read from fixed length records (random access file)
 //-----------------------------------------------------
 
-public class TestDB {
+public class TestDB
+{
   static Record record;
 
-  public static void main(String[] args) throws IOException {
+  public static void main(String[] args) throws IOException
+  {
 
-    // calls constructor
+    //Calls constructor
     DB db = new DB();
 
-    // creates database from csv file 
-    db.createDB("Fortune500"); // creates Fortune500_small.data
+    //Creates database from csv file 
+    //db.createDB("Fortune500"); // creates Fortune500_small.data
 
-    // opens "Fortune500_small.data"
-    db.open("Fortune500");
+    //Opens "Fortune500_small.data"
+    //db.open("Fortune500");
 
-    System.out
-        .println("------------- Testing readRecord ------------");
+    //Making the database start as closed
+    //boolean dbOpen = false;
+
+    System.out.println("------------- Testing readRecord ------------");
 
     // Reads record 0
     // Then prints the values of the 5 fields to the screen with the name of the
@@ -28,7 +32,7 @@ public class TestDB {
     // id: 00003 experience: 3 married: no wages: 1.344461678 industry:
     // Business_and_Repair_Service
 
-    // for part 1, hardcoded which records to read for testing
+    //for part 1, hardcoded which records to read for testing
     
     
     // int record_num = 0;
@@ -146,37 +150,213 @@ public class TestDB {
     // } else
     //   System.out.println("NAME " + NAME + " not found in our records\n\n");
 
-    // Allow user to search for a name
-    Scanner scanner = new Scanner(System.in);
-    // System.out.println("------------- User Search ------------");
-    System.out.println("MENU OF OPERATIONS:");
-    System.out.println("1. Create a new database\n");
-    System.out.println("2. Open a database\n");
-    System.out.println("3. Close a database\n");
-    System.out.println("4. Display a record\n");
-    System.out.println("5. Write a record\n");
-    System.out.println("6. Find a record\n");
-    System.out.println("7. Exit\n");
-    System.out.println("Enter your choice (1-7): ");
+    while(true)
+    {
+        //Allow user to search for a name
+        Scanner scanner = new Scanner(System.in);
+        //System.out.println("------------- User Search ------------");
+        System.out.println("MENU OF OPERATIONS:");
+        System.out.println("1. Create a new database\n");
+        System.out.println("2. Open a database\n");
+        System.out.println("3. Close a database\n");
+        System.out.println("4. Display a record\n");
+        System.out.println("5. Update a record\n");
+        System.out.println("6. Print a report\n");
+        System.out.println("7. Add a record\n");
+        System.out.println("8. Delete a record\n");
+        System.out.println("9. Quit\n");
+        System.out.println("Enter your choice (1-9): ");
 
-    int choice = scanner.nextInt();
-    scanner.nextLine();  
+        int choice;
+        //String prefix;
+        //String key;
+        //int idx;
+        //Error checking in case a non-number character is entered.
+        while (!scanner.hasNextInt())
+        {
+            System.out.println("You need to enter a number.\n Enter the number that matches your desired option.");
+            scanner.nextLine();
+            continue;
+        }
+        choice = scanner.nextInt();
+        scanner.nextLine();  
 
-    // System.out.println("Enter a NAME to Search: ");
-    // String userInput = scanner.nextLine().toUpperCase();  // convert to uppercase to match database entries
-    // record_num = db.findRecord(userInput);
-    // if (record_num != -1) {
-    //   record = db.readRecord(record_num);
-    //   System.out
-    //       .println(
-    //           "NAME " + userInput + " found at Record " + record_num + "\nRecordNum " + record_num + ": \n" + record.toString()
-    //               + "\n\n");
-    // } else
-    //   System.out.println("NAME " + userInput + " not found in our records\n\n");
-    
-    
-    scanner.close();
-    // closes the database file
-    db.close();
-  }
+        try
+        {
+            
+            switch (choice)
+            {
+                case 1: //Creating a new DB
+                    System.out.println("What do you want to name your database?");
+                    String prefix = scanner.nextLine().trim();
+                    db.createDB(prefix);
+                    //Creating does NOT necessarily mean "open"
+                    System.out.println("Database files created for: " + prefix);
+                    break;
+                case 2: //Open the DB
+                    if (db.isOpen()) {
+                        System.out.println("Your database is already open. Close it first.");
+                        break;
+                    }
+                    System.out.print("Input your database prefix to open it (ex: Fortune500): ");
+                    prefix = scanner.nextLine().trim();
+                    db.open(prefix);
+                    //db.isOpen() = true;
+                    if (db.open(prefix))
+                        System.out.println("Opened database: " + prefix);
+                    else
+                        System.out.println("Failed to open database " + prefix);
+                    break;
+
+                case 3: //Closing the DB
+                    if (!db.isOpen()) {
+                        System.out.println("No database is currently open.");
+                        break;
+                    }
+                    db.close();
+                    //dbOpen = false;
+                    System.out.println("Database closed.");
+                    break;
+
+                case 4: //Displaying record
+                    if (!db.isOpen()) {
+                        System.out.println("Open a database first.");
+                        break;
+                    }
+                    System.out.print("Enter company name (primary key): ");
+                    String key = scanner.nextLine();
+                    db.displayRecord(key);/* 
+                    int idx = db.findRecord(key);
+                    if (idx == -1) {
+                        System.out.println("Record not found.");
+                    } else {
+                        Record r = db.readRecord(idx);
+                        System.out.println("Found at record #" + idx);
+                        System.out.println("Name: " + r.Name);
+                        System.out.println("Rank: " + r.Rank);
+                        System.out.println("City: " + r.City);
+                        System.out.println("State: " + r.State);
+                        System.out.println("Zip: " + r.Zip);
+                        System.out.println("Employees: " + r.Employees);
+                    }*/
+                    break;
+
+                case 5: //Updating records
+                    if (!db.isOpen()) {
+                        System.out.println("Open a database first.");
+                        break;
+                    }
+                    System.out.print("Enter company name (primary key): ");
+                    key = scanner.nextLine();
+                    db.displayRecord(key);/*/
+                    idx = db.findRecord(key);
+                    if (idx == -1) {
+                        System.out.println("Record not found.");
+                        break;
+                    }
+
+                    Record old = db.readRecord(idx);
+                    System.out.println("Current values:");
+                    System.out.println("Name: " + old.Name);
+                    System.out.println("Rank: " + old.Rank);
+                    System.out.println("City: " + old.City);
+                    System.out.println("State: " + old.State);
+                    System.out.println("Zip: " + old.Zip);
+                    System.out.println("Employees: " + old.Employees);*/
+
+                    System.out.println("\nEnter new values (leave blank to keep existing):");
+                    System.out.print("Rank: ");
+                    String rank = scanner.nextLine();
+                    System.out.print("City: ");
+                    String city = scanner.nextLine();
+                    System.out.print("State: ");
+                    String state = scanner.nextLine();
+                    System.out.print("Zip: ");
+                    String zip = scanner.nextLine();
+                    System.out.print("Employees: ");
+                    String employees = scanner.nextLine();
+
+                    boolean ok = db.updateRecordByName(key, rank, city, state, zip, employees);
+                    System.out.println(ok ? "Record updated." : "Update failed.");
+                    break;
+
+                case 6: //Printing out a report
+                    if (!db.isOpen()) {
+                        System.out.println("Open a database first.");
+                        break;
+                    }
+                    db.printReport();
+                    break;
+
+                case 7: //Adding a record
+                    if (!db.isOpen()) {
+                        System.out.println("Open a database first.");
+                        break;
+                    }
+                    System.out.println("Enter values for new record:");
+                    System.out.print("Name (primary key): ");
+                    String name = scanner.nextLine();
+                    System.out.print("Rank: ");
+                    rank = scanner.nextLine();
+                    System.out.print("City: ");
+                    city = scanner.nextLine();
+                    System.out.print("State: ");
+                    state = scanner.nextLine();
+                    System.out.print("Zip: ");
+                    zip = scanner.nextLine();
+                    System.out.print("Employees: ");
+                    employees = scanner.nextLine();
+
+                    ok = db.addRecord(name, rank, city, state, zip, employees);
+                    System.out.println(ok ? "Record added (appended)."
+                                        : "Add failed.");
+                    break;
+
+                case 8: //Deleting a record
+                    if (!db.isOpen()) {
+                        System.out.println("Open a database first.");
+                        break;
+                    }
+                    System.out.print("Enter company name (primary key) to delete: ");
+                    key = scanner.nextLine();
+                    ok = db.deleteRecord(key);
+                    System.out.println(ok ? "Record deleted (logically)." : "Delete failed / not found.");
+                    break;
+
+                case 9: //Quitting the database 
+                    if (db.isOpen())
+                        db.close();
+                    System.out.println("Goodbye!");
+                    scanner.close();
+                    return;
+
+                default:
+                    System.out.println("Invalid choice. Please pick 1-9.");
+                }
+            }
+            catch (IOException e) {
+                // If your DB methods throw IOException, this keeps the menu alive
+                System.out.println("I/O error: " + e.getMessage());
+            } catch (Exception e) {
+                System.out.println("Error: " + e.getMessage());
+            }
+            
+            // System.out.println("Enter a NAME to Search: ");
+            // String userInput = scanner.nextLine().toUpperCase();  // convert to uppercase to match database entries
+            // record_num = db.findRecord(userInput);
+            // if (record_num != -1) {
+            //   record = db.readRecord(record_num);
+            //   System.out
+            //       .println(
+            //           "NAME " + userInput + " found at Record " + record_num + "\nRecordNum " + record_num + ": \n" + record.toString()
+            //               + "\n\n");
+            // } else
+            //   System.out.println("NAME " + userInput + " not found in our records\n\n");
+            
+            
+            //scanner.close();
+            // closes the database file
+            //db.close();
+        }
+    }
 }
