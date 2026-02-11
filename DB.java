@@ -61,7 +61,7 @@ public class DB {
       }
       cfg.close();
       } catch (IOException e) {
-      System.out.println("Could not open file\n");
+      System.out.println("Could not open config file " + prefix + ".config\n");
       e.printStackTrace();
       return false;
       } 
@@ -72,7 +72,7 @@ public class DB {
         this.num_records = this.numSortedRecords + this.numUnsortedRecords;
         return true;
       } catch (IOException e) {
-        System.out.println("Could not open file\n");
+        System.out.println("Could not open data file " + prefix + ".data\n");
         e.printStackTrace();
         this.Dinout = null;
         return false;
@@ -379,7 +379,7 @@ public class DB {
         Record r = readRecord(i);
         if (r.isEmpty()) break;
         System.out.printf("%2d) %-40s %-5s %-25s %-2s %-10s %-10s%n",
-                i, r.Name, r.Rank, r.City, r.State, r.Zip, r.Employees);
+                i + 1, r.Name, r.Rank, r.City, r.State, r.Zip, r.Employees);
     }
   }
 

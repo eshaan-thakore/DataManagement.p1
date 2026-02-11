@@ -200,9 +200,9 @@ public class TestDB
                     }
                     System.out.print("Input your database prefix to open it (ex: Fortune500): ");
                     prefix = scanner.nextLine().trim();
-                    db.open(prefix);
+                    boolean opened = db.open(prefix);
                     //db.isOpen() = true;
-                    if (db.open(prefix))
+                    if (opened)
                         System.out.println("Opened database: " + prefix);
                     else
                         System.out.println("Failed to open database " + prefix);
