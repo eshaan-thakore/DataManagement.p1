@@ -165,8 +165,8 @@ public class TestDB
             }
         }
         catch (IOException e) {
-            // If your DB methods throw IOException, this keeps the menu alive
-            System.out.println("I/O error: " + e.getMessage());
+            // lists errors for input + output operations
+            System.out.println("Input/Outputerror: " + e.getMessage());
         } catch (Exception e) {
             System.out.println("Error: " + e.getMessage());
         }

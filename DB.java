@@ -64,7 +64,7 @@ public class DB
       cfg.close();
       } catch (IOException e) {
       System.out.println("Could not open config file " + prefix + ".config\n");
-      e.printStackTrace();
+      //e.printStackTrace();
       return false;
       } 
 
@@ -75,7 +75,7 @@ public class DB
         return true;
       } catch (IOException e) {
         System.out.println("Could not open data file " + prefix + ".data\n");
-        e.printStackTrace();
+        //e.printStackTrace();
         this.Dinout = null;
         return false;
       }
@@ -113,7 +113,7 @@ public class DB
     try {
       file.writeBytes(Name + Rank + City + State + Zip + Employees+"\n");
     } catch (IOException e) {
-      e.printStackTrace();
+      //e.printStackTrace();
     }  
   }
   
@@ -136,7 +136,7 @@ public class DB
         System.out.println("Record Successfully Overwritten");
       } catch (IOException e) {
         System.out.println("There was an error while attempting to overwrite a record from the database file.\n");
-        e.printStackTrace();
+        //e.printStackTrace();
       }
     }
   }
@@ -198,7 +198,7 @@ public class DB
       recordSize = RECORD_SIZE;
     } catch (IOException e) {
       System.out.println("There was an error while attempting to close the database file.\n");
-      e.printStackTrace();
+      //e.printStackTrace();
     }
   }
 
@@ -234,7 +234,7 @@ public class DB
         record.updateFields(fields);
       } catch (IOException e) {
         System.out.println("There was an error while attempting to read a record from the database file.\n");
-        e.printStackTrace();
+        //e.printStackTrace();
       }
     }
     return record;
@@ -376,7 +376,7 @@ public class DB
       return true;
     } catch (IOException e) {
       System.out.println("Error while adding a record to the database file.\n");
-      e.printStackTrace();
+      //e.printStackTrace();
     }
     return false;
   }
@@ -404,7 +404,7 @@ public class DB
       cfg.close();
     } catch (IOException e) {
       System.out.println("Error while writing config to the database file.\n");
-      e.printStackTrace();
+      //e.printStackTrace();
     }
   }
 }
