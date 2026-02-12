@@ -3,7 +3,7 @@ import java.io.RandomAccessFile;
 
 public class DB {
   public static final int RECORD_SIZE = 93; // summed widths of all fields + newline (40 + 5 + 25 + 2 + 10 + 10 +1=93)
-  public static final int name_w = 40, rank_w = 5, city_w = 25, state_w = 2, zip_w = 10, employees_w = 10;  // widths of each field for clarity
+  public static final int name_w = 40, rank_w = 5, city_w = 25, state_w = 3, zip_w = 10, employees_w = 10;  // widths of each field for clarity
   public int numSortedRecords; // total number of sorted records in the database
   public int numUnsortedRecords; // total number of unsorted records in the database
   public int recordSize = RECORD_SIZE; // size of each record in the database
@@ -152,7 +152,10 @@ public class DB {
       
       while ((line = Din.readLine()) != null) {
           String[] attribute = line.split(",", -1); // -1 to include trailing empty strings
-          if (attribute.length != 6) continue; // skip malformed lines
+          if (attribute.length != 6) {
+            System.out.println("BAD CSV (" + attribute.length + " cols): " + line);
+            continue;
+          } // skip malformed lines
           // trim whitespace from each attribute
           for (int k = 0; k < 6; k++) {
               attribute[k] = attribute[k].trim();
@@ -163,7 +166,7 @@ public class DB {
       }
       Din.close();
       Dout.close();
-      numSortedRecords = count;;
+      numSortedRecords = count;
       numUnsortedRecords = 0;
       num_records = numSortedRecords + numUnsortedRecords;
       writeConfig();
