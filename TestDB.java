@@ -7,9 +7,8 @@ import java.util.Scanner;
 
 public class TestDB
 {
-  static Record record;
 
-  public static void main(String[] args) throws IOException
+  public static void main(String[] args)
   {
 
     //Calls constructor
@@ -62,7 +61,7 @@ public class TestDB
                     if (opened) {
                         System.out.println("Opened database: " + prefix);
                     } else {
-                        System.out.println("Failed to open database " + prefix + " as there isn't enough space on your computer.");
+                        System.out.println("Failed to open database " + prefix + ". Check that the files exist and the prefix is correct.");
                         System.out.println("You should try opening the pre-installed database, Fortune500.");
                     }
                     break;

@@ -48,15 +48,15 @@ public class DB
       String line;
       while ((line = cfg.readLine()) != null) {
         line = line.trim();
-        if (line.startsWith("numSortedRecords=")) {
-          this.numSortedRecords = Integer.parseInt(line.substring("numSortedRecords=".length()));
+        if (line.startsWith("numSortedRecords=")) { //Parse number of sorted records 
+          this.numSortedRecords = Integer.parseInt(line.substring("numSortedRecords=".length())); // same for unsorted records and record size
         } else if (line.startsWith("numUnsortedRecords=")) {
           this.numUnsortedRecords = Integer.parseInt(line.substring("numUnsortedRecords=".length()));
         } else if (line.startsWith("recordSize=")) {
           this.recordSize = Integer.parseInt(line.substring("recordSize=".length()));
         }
       }
-      if (recordSize != RECORD_SIZE) {
+      if (recordSize != RECORD_SIZE) { //Check if record size in config file matches expected record size
         System.out.println("Record size mismatch.");
         cfg.close();
         return false;
@@ -69,7 +69,7 @@ public class DB
       } 
 
       try {
-        this.Dinout = new RandomAccessFile(prefix + ".data", "rw");
+        this.Dinout = new RandomAccessFile(prefix + ".data", "rw"); //Open data file in read/write mode
         this.currentPrefix = prefix;
         this.num_records = this.numSortedRecords + this.numUnsortedRecords;
         return true;
@@ -94,6 +94,7 @@ public class DB
    */
   public void writeRecord(RandomAccessFile file, String Name, String Rank, String City, String State, String Zip, String Employees )
   { //Writes record to file with padding for uniform file reading
+
     //Prevent null pointer exceptions
     Name = nn(Name);
     Rank = nn(Rank);
@@ -158,26 +159,15 @@ public class DB
     {
       String[] attribute = line.split(",", -1); //-1 to include trailing empty strings
       if (attribute.length != 6) {
-        System.out.println("BAD CSV (" + attribute.length + " cols): " + line);
+         System.out.println("Malformed line at record " + count + ": " + line);
         continue;
       } //Skip malformed lines
       //Trim whitespace from each attribute
       for (int k = 0; k < 6; k++) {
           attribute[k] = attribute[k].replace("\r", "").trim();
       }
-      long before = Dout.length();
-      writeRecord(Dout, attribute[0], attribute[1], attribute[2], attribute[3], attribute[4], attribute[5]);
-      long after = Dout.length();
-
-      if (after - before != RECORD_SIZE) {
-        System.out.println("BAD WRITE at record " + count + " wrote=" + (after - before));
-        break;
-      }
-      if (after % RECORD_SIZE != 0) {
-        System.out.println("BAD LEN at record " + count + " len=" + after + " mod=" + (after % RECORD_SIZE));
-        break;
-      }
-      count++;
+      writeRecord(Dout, attribute[0], attribute[1], attribute[2], attribute[3], attribute[4], attribute[5]); //Write record to data file
+      count++; //Update record count
     }
 
     Din.close();
@@ -185,7 +175,7 @@ public class DB
     numSortedRecords = count;
     numUnsortedRecords = 0;
     num_records = numSortedRecords + numUnsortedRecords;
-    writeConfig();
+    writeConfig(); //Write config file with record counts and record size
 
   }
  
@@ -253,7 +243,7 @@ public class DB
   /**
    * Binary Search by record id
    * 
-   * @param id
+   * @param name
    * @return Record number (which can then be used by read to
    *         get the fields) or -1 if id not found
    */
@@ -269,7 +259,6 @@ public class DB
       record = readRecord(Middle);
       String MiddleName = normName(record.Name);
 
-      // int result = MiddleId[0].compareTo(id); // DOES STRING COMPARE
       int result = MiddleName.compareTo(normName(name)); // DOES STRING COMPARE of MiddleName and name
       if (result == 0)
         Found = true;
@@ -294,14 +283,14 @@ public class DB
     if (Dinout == null)
       return -1;
 
-    String target = normName(name);
+    String target = normName(name); // normalize the target name for consistent searching
 
-    int idx = binarySearch(target);
+    int idx = binarySearch(target); // first try to find the record in the sorted portion of the database
     if (idx != -1) {
       return idx;
     }
 
-    for (int i = numSortedRecords; i < num_records; i++) {
+    for (int i = numSortedRecords; i < num_records; i++) { // if not found in sorted portion, search through unsorted portion of the database
       Record r = readRecord(i);
       if (!r.isEmpty() && normName(r.Name).equals(target)) 
         return i;
@@ -343,7 +332,7 @@ public class DB
     }
   }
 
-  public boolean deleteRecord(String name) {
+  public boolean deleteRecord(String name) { //wrapper for overwrite record to check if file is open and delete the record by overwriting with empty values
     if (Dinout == null)
       return false;
     int record_num = findRecord(normName(name));
@@ -351,15 +340,15 @@ public class DB
       return false;
     Record old = readRecord(record_num);
 
-    overwriteRecord(record_num, old.Name, "", "", "", "", "");
+    overwriteRecord(record_num, old.Name, "", "", "", "", ""); // overwrite with empty values to maintain record numbering
     return true;  
   }
 
-  public boolean isOpen() {
+  public boolean isOpen() { //Checks if the database file is open
     return (Dinout != null);
   }
 
-  public void displayRecord(String name)
+  public void displayRecord(String name) //wrapper for read record to check if file is open and display the record in a user friendly way
   {
     int idx = findRecord(name);
     if (idx == -1) {
@@ -375,15 +364,15 @@ public class DB
     System.out.println("Employees: " + r.Employees);
   }
 
-  public boolean addRecord(String Name, String Rank, String City, String State, String Zip, String Employees) {
+  public boolean addRecord(String Name, String Rank, String City, String State, String Zip, String Employees) { //wrapper for write record to check if file is open and update number of records
     if (Dinout == null) 
       return false;
     try {
       Dinout.seek(Dinout.length()); // move to end of file
-      writeRecord (Dinout, Name, Rank, City, State, Zip, Employees);
+      writeRecord (Dinout, Name, Rank, City, State, Zip, Employees); // write new record
       num_records++;
-      numUnsortedRecords++;
-      writeConfig();
+      numUnsortedRecords++; // update record counts
+      writeConfig(); // update config file with new record counts
       return true;
     } catch (IOException e) {
       System.out.println("Error while adding a record to the database file.\n");
@@ -392,18 +381,18 @@ public class DB
     return false;
   }
 
-  public void printReport() {
-    int limit = Math.min(10, num_records);
+  public void printReport() { //Prints the first 10 records in the database for testing purposes
+    int limit = Math.min(10, num_records); 
     for (int i = 0; i < limit; i++) {
         Record r = readRecord(i);
-        if (r.isEmpty()) break;
-        System.out.printf("%2d) %-" + name_w + "s %-" + rank_w + "s %-" + city_w + "s %-" +
+        if (r.isEmpty()) continue;
+        System.out.printf("%2d) %-" + name_w + "s %-" + rank_w + "s %-" + city_w + "s %-" +  // updated so that the fields are aligned when printed
                   state_w + "s %-" + zip_w + "s %-" + employees_w + "s%n",
                   i+1, r.Name, r.Rank, r.City, r.State, r.Zip, r.Employees);
     }
   }
 
-  public void writeConfig() {
+  public void writeConfig() { //Writes the config file with the current number of sorted and unsorted records and record size
     if (currentPrefix == null)
       return;
     try {
