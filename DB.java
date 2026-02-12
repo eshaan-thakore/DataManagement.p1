@@ -3,8 +3,8 @@ import java.io.RandomAccessFile;
 
 public class DB
 {
-  public static final int RECORD_SIZE = 93; //Summed widths of all fields + newline (40 + 5 + 25 + 2 + 10 + 10 +1=93)
-  public static final int name_w = 40, rank_w = 5, city_w = 25, state_w = 3, zip_w = 10, employees_w = 10;  //Widths of each field for clarity
+  public static final int name_w = 60, rank_w = 7, city_w = 29, state_w = 5, zip_w = 16, employees_w = 16;  //Widths of each field for clarity
+  public static final int RECORD_SIZE = name_w + rank_w + city_w + state_w + zip_w + employees_w + 1; //Summed widths of all fields + newline
   public int numSortedRecords; //Total number of sorted records in the database
   public int numUnsortedRecords; //Total number of unsorted records in the database
   public int recordSize = RECORD_SIZE; //Size of each record in the database
