@@ -61,7 +61,7 @@ public class TestDB
                     boolean opened = db.open(prefix);
                     if (opened) {
                         System.out.println("Opened database: " + prefix);
-                    } else {
+                    else
                         System.out.println("Failed to open database " + prefix + " as there isn't enough space on your computer.");
                         System.out.println("You should try opening the pre-installed database, Fortune500.");
                     }
