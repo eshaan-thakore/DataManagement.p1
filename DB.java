@@ -109,7 +109,6 @@ public class DB {
     try {
       file.writeBytes(Name + Rank + City + State + Zip + Employees+"\n");
     } catch (IOException e) {
-      // TODO Auto-generated catch block
       e.printStackTrace();
     }  
   }
