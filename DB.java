@@ -1,20 +1,22 @@
 import java.io.IOException;
 import java.io.RandomAccessFile;
 
-public class DB {
-  public static final int RECORD_SIZE = 93; // summed widths of all fields + newline (40 + 5 + 25 + 2 + 10 + 10 +1=93)
-  public static final int name_w = 40, rank_w = 5, city_w = 25, state_w = 3, zip_w = 10, employees_w = 10;  // widths of each field for clarity
-  public int numSortedRecords; // total number of sorted records in the database
-  public int numUnsortedRecords; // total number of unsorted records in the database
-  public int recordSize = RECORD_SIZE; // size of each record in the database
+public class DB
+{
+  public static final int RECORD_SIZE = 93; //Summed widths of all fields + newline (40 + 5 + 25 + 2 + 10 + 10 +1=93)
+  public static final int name_w = 40, rank_w = 5, city_w = 25, state_w = 3, zip_w = 10, employees_w = 10;  //Widths of each field for clarity
+  public int numSortedRecords; //Total number of sorted records in the database
+  public int numUnsortedRecords; //Total number of unsorted records in the database
+  public int recordSize = RECORD_SIZE; //Size of each record in the database
   private int num_records;
   
   private RandomAccessFile Dinout;
   private String currentPrefix;
 
 
-  // altered constructor to fit new csv
-  public DB() {
+  //Altered constructor to fit new csv
+  public DB()
+  {
     this.Dinout = null;
     this.num_records = 0;
     this.numSortedRecords = 0;
@@ -29,20 +31,21 @@ public class DB {
    * @param prefix (e.g., Fortune500_small)
    * @return status true if operation successful
    */
-  public boolean open(String prefix) {
-    if (isOpen()) 
-    {
+  public boolean open(String prefix)
+  {
+    if (isOpen()){
       System.out.println("Your database is already open. Close it first.");
       return false;
     }
-    // Set the number of records
+    //Set the number of records
     this.num_records = 0;
     this.numUnsortedRecords = 0;
     this.numSortedRecords = 0;
     this.recordSize = RECORD_SIZE;
-    // Open file in read/write mode
-    try {
-      RandomAccessFile cfg = new RandomAccessFile(prefix + ".config", "r");  // read config file for number of records
+    //Open file in read/write mode
+    try
+    {
+      RandomAccessFile cfg = new RandomAccessFile(prefix + ".config", "r");  //Read config file for number of records
       String line;
       while ((line = cfg.readLine()) != null) {
         line = line.trim();
@@ -80,7 +83,7 @@ public class DB {
     }
   
 
-  private static String nn(String s) { // helper function to prevent null pointer exceptions with empty user
+  private static String nn(String s) { //Helper function to prevent null pointer exceptions with empty user
     if (s == null)
       return "";
     else
@@ -90,8 +93,9 @@ public class DB {
    * Writes the data to the location specified by file parameter
    *  
    */
-  public void writeRecord(RandomAccessFile file, String Name, String Rank, String City, String State, String Zip, String Employees ) { //writes record to file with padding for uniform file reading
-    //prevent null pointer exceptions
+  public void writeRecord(RandomAccessFile file, String Name, String Rank, String City, String State, String Zip, String Employees )
+  { //Writes record to file with padding for uniform file reading
+    //Prevent null pointer exceptions
     Name = nn(Name);
     Rank = nn(Rank);
     City = nn(City);
@@ -99,7 +103,7 @@ public class DB {
     Zip = nn(Zip);
     Employees = nn(Employees);
 
-    //format input values to be put in record
+    //Format input values to be put in record
     Name = String.format("%-" + name_w + "s", Name.length() > name_w ? Name.substring(0, name_w) : Name);
     Rank = String.format("%-" + rank_w + "s", Rank.length() > rank_w ? Rank.substring(0, rank_w) : Rank);
     City = String.format("%-" + city_w + "s", City.length() > city_w ? City.substring(0, city_w) : City);
@@ -109,7 +113,6 @@ public class DB {
     try {
       file.writeBytes(Name + Rank + City + State + Zip + Employees+"\n");
     } catch (IOException e) {
-      // TODO Auto-generated catch block
       e.printStackTrace();
     }  
   }
@@ -123,11 +126,12 @@ public class DB {
       System.out.println("Database file is not open. Cannot overwrite record.\n");
       return;
     }
-    if ((record_num >= 0) && (record_num < this.num_records)) {
+    if ((record_num >= 0) && (record_num < this.num_records))
+    {
       try {
-        Dinout.seek(0); // return to the top of the file
+        Dinout.seek(0); //Return to the top of the file
         Dinout.skipBytes(record_num * recordSize);
-	//overwrite the specified record
+	      //Overwrite the specified record
         writeRecord (Dinout, Name, Rank, City, State, Zip, Employees);
         System.out.println("Record Successfully Overwritten");
       } catch (IOException e) {
@@ -141,35 +145,37 @@ public class DB {
    * Reads CSV file attributes
    * @throws IOException 
    */
-  public void createDB(String prefix) throws IOException {
-      RandomAccessFile Din = new RandomAccessFile(prefix+".csv", "r");
-      RandomAccessFile Dout = new RandomAccessFile(prefix+".data","rw");
-      Dout.setLength(0); // clear file if it already exists 
-      currentPrefix = prefix;
-      String line;
-      int count = 0;
-      this.recordSize = RECORD_SIZE;
-      
-      while ((line = Din.readLine()) != null) {
-          String[] attribute = line.split(",", -1); // -1 to include trailing empty strings
-          if (attribute.length != 6) {
-            System.out.println("BAD CSV (" + attribute.length + " cols): " + line);
-            continue;
-          } // skip malformed lines
-          // trim whitespace from each attribute
-          for (int k = 0; k < 6; k++) {
-              attribute[k] = attribute[k].trim();
-          }
-          writeRecord (Dout, attribute[0], attribute[1], attribute[2], attribute[3], attribute[4], attribute[5]); //added one more attribute to fit new csv
-      
-          count++;
-      }
-      Din.close();
-      Dout.close();
-      numSortedRecords = count;
-      numUnsortedRecords = 0;
-      num_records = numSortedRecords + numUnsortedRecords;
-      writeConfig();
+  public void createDB(String prefix) throws IOException
+  {
+    RandomAccessFile Din = new RandomAccessFile(prefix+".csv", "r");
+    RandomAccessFile Dout = new RandomAccessFile(prefix+".data","rw");
+    Dout.setLength(0); // clear file if it already exists 
+    currentPrefix = prefix;
+    String line;
+    int count = 0;
+    this.recordSize = RECORD_SIZE;
+    
+    while ((line = Din.readLine()) != null)
+    {
+        String[] attribute = line.split(",", -1); //-1 to include trailing empty strings
+        if (attribute.length != 6) {
+          System.out.println("BAD CSV (" + attribute.length + " cols): " + line);
+          continue;
+        } //Skip malformed lines
+        //Trim whitespace from each attribute
+        for (int k = 0; k < 6; k++) {
+            attribute[k] = attribute[k].trim();
+        }
+        writeRecord (Dout, attribute[0], attribute[1], attribute[2], attribute[3], attribute[4], attribute[5]); //Added one more attribute to fit new csv
+    
+        count++;
+    }
+    Din.close();
+    Dout.close();
+    numSortedRecords = count;
+    numUnsortedRecords = 0;
+    num_records = numSortedRecords + numUnsortedRecords;
+    writeConfig();
 
   }
  
