@@ -14,13 +14,12 @@ public class TestDB
 
     //Calls constructor
     DB db = new DB();
+    Scanner scanner = new Scanner(System.in);
 
     System.out.println("------------- Testing readRecord ------------");
-    
     while(true)
     {
         //Allow user to search for a name
-        Scanner scanner = new Scanner(System.in);
         //System.out.println("------------- User Search ------------");
         System.out.println("MENU OF OPERATIONS:");
         System.out.println("1. Create a new database\n");
@@ -34,14 +33,12 @@ public class TestDB
         System.out.println("9. Quit\n");
         System.out.println("Enter your choice (1-9): ");
 
-        int choice;
         //Error checking in case a non-number character is entered.
         while (!scanner.hasNextInt()) {
             System.out.println("You need to enter a number.\n Enter the number that matches your desired option.");
             scanner.nextLine();
-            continue;
         }
-        choice = scanner.nextInt();
+        int choice = scanner.nextInt();
         scanner.nextLine();  
 
         try
@@ -62,11 +59,12 @@ public class TestDB
                     System.out.print("Input your database prefix to open it (ex: Fortune500): ");
                     prefix = scanner.nextLine().trim();
                     boolean opened = db.open(prefix);
-                    if (opened)
+                    if (opened) {
                         System.out.println("Opened database: " + prefix);
-                    else
+                    } else {
                         System.out.println("Failed to open database " + prefix + " as there isn't enough space on your computer.");
                         System.out.println("You should try opening the pre-installed database, Fortune500.");
+                    }
                     break;
 
                 case 3: //Closing the DB
