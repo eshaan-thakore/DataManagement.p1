@@ -3,7 +3,7 @@ import java.io.RandomAccessFile;
 
 public class DB
 {
-  public static final int RECORD_SIZE = 94; //Summed widths of all fields + newline (40 + 5 + 25 + 3 + 10 + 10 +1=94)
+  public static final int RECORD_SIZE = 93; //Summed widths of all fields + newline (40 + 5 + 25 + 2 + 10 + 10 +1=93)
   public static final int name_w = 40, rank_w = 5, city_w = 25, state_w = 3, zip_w = 10, employees_w = 10;  //Widths of each field for clarity
   public int numSortedRecords; //Total number of sorted records in the database
   public int numUnsortedRecords; //Total number of unsorted records in the database
@@ -41,7 +41,6 @@ public class DB
     this.num_records = 0;
     this.numUnsortedRecords = 0;
     this.numSortedRecords = 0;
-    this.recordSize = RECORD_SIZE;
     //Open file in read/write mode
     try
     {
@@ -157,19 +156,30 @@ public class DB
     
     while ((line = Din.readLine()) != null)
     {
-        String[] attribute = line.split(",", -1); //-1 to include trailing empty strings
-        if (attribute.length != 6) {
-          System.out.println("BAD CSV (" + attribute.length + " cols): " + line);
-          continue;
-        } //Skip malformed lines
-        //Trim whitespace from each attribute
-        for (int k = 0; k < 6; k++) {
-            attribute[k] = attribute[k].trim();
-        }
-        writeRecord (Dout, attribute[0], attribute[1], attribute[2], attribute[3], attribute[4], attribute[5]); //Added one more attribute to fit new csv
-    
-        count++;
+      String[] attribute = line.split(",", -1); //-1 to include trailing empty strings
+      if (attribute.length != 6) {
+        System.out.println("BAD CSV (" + attribute.length + " cols): " + line);
+        continue;
+      } //Skip malformed lines
+      //Trim whitespace from each attribute
+      for (int k = 0; k < 6; k++) {
+          attribute[k] = attribute[k].replace("\r", "").trim();
+      }
+      long before = Dout.length();
+      writeRecord(Dout, attribute[0], attribute[1], attribute[2], attribute[3], attribute[4], attribute[5]);
+      long after = Dout.length();
+
+      if (after - before != RECORD_SIZE) {
+        System.out.println("BAD WRITE at record " + count + " wrote=" + (after - before));
+        break;
+      }
+      if (after % RECORD_SIZE != 0) {
+        System.out.println("BAD LEN at record " + count + " len=" + after + " mod=" + (after % RECORD_SIZE));
+        break;
+      }
+      count++;
     }
+
     Din.close();
     Dout.close();
     numSortedRecords = count;
@@ -387,8 +397,9 @@ public class DB
     for (int i = 0; i < limit; i++) {
         Record r = readRecord(i);
         if (r.isEmpty()) break;
-        System.out.printf("%2d) %-40s %-5s %-25s %-2s %-10s %-10s%n",
-                i + 1, r.Name, r.Rank, r.City, r.State, r.Zip, r.Employees);
+        System.out.printf("%2d) %-" + name_w + "s %-" + rank_w + "s %-" + city_w + "s %-" +
+                  state_w + "s %-" + zip_w + "s %-" + employees_w + "s%n",
+                  i+1, r.Name, r.Rank, r.City, r.State, r.Zip, r.Employees);
     }
   }
 
